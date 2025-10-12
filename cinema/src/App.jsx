@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import './App.css'
 import Navbar from './Components/Navbar'
 import { Route, Routes } from 'react-router-dom'
@@ -12,42 +12,49 @@ const Movies = lazy(() => import('./Components/Movies'))
 const Watchlist = lazy(() => import('./Components/Watchlist'))
 
 function App() {
-    const [watchlist, setWatchlist] = useState([]);
+  const [watchlist, setWatchlist] = useState([]);
 
-    
+
+
+
+
+
   const addWatchlist = (movie) => {
     setWatchlist((prev) => {
-      if (prev.some((m) => m.name === movie.name)) {
-        toast.error(`${movie.name} is already in your watchlist!`);
-        return prev;
-      } else {
-        toast.success(`${movie.name} added to watchlist!`);
-        return [...prev, movie];
+      if (!prev.some((item) => item.id === movie.id)) {
+        const updated = [...prev, movie];
+        localStorage.setItem('moviedata', JSON.stringify(updated));
+         toast.success(`${movie.title} added to watchlist 🎬`)
+        return updated;
       }
+      toast.error(`${movie.title} is already in watchlist ⚠️`)
+      return prev;
     });
   };
 
-  const removeFromWatchlist = (movie) => {
-    setWatchlist((prev) => {
-      if (prev.some((m) => m.name === movie.name)) {
-        toast.error(`${movie.name} removed from watchlist!`);
-        return prev.filter((m) => m.name !== movie.name);
-      } else {
-        toast.error(`${movie.name} is not in your watchlist!`);
-        return prev;
+
+  useEffect(() => {
+    const result = localStorage.getItem('moviedata')
+    if (!result) {
+      return
     }
-});
-};
-console.log(watchlist)
+    setWatchlist(JSON.parse(result))
+  }, [])
+
+  const removeFromWatchlist = (movie) => {
+    setWatchlist((prev) => prev.filter((item) => item.id !== movie.id));
+      toast.success(`${movie.title} removed from watchlist ❌`);
+  };
+  console.log(watchlist)
 
   // const isInWatchlist = watchlist.some((m) => m.name === name);
 
- 
-  return ( 
+
+  return (
     <>
-    <Toaster position='top-right'/>
-  
-      <Navbar />
+      <Toaster position='top-right' />
+
+      <Navbar watchlistCount={watchlist.length} />
 
       {/* Suspense will show a fallback while lazy components load */}
       <Suspense
@@ -63,14 +70,21 @@ console.log(watchlist)
             element={
               <>
                 <Banner />
-                <Movies  />
+                <Movies watchlist={watchlist} addWatchlist={addWatchlist} removeFromWatchlist={removeFromWatchlist} />
               </>
             }
           />
-          <Route path="/watchlist" element={<Watchlist />} />
-        </Routes>
+          <Route
+            path="/watchlist"
+            element={
+              <Watchlist
+                watchlist={watchlist}
+                removeFromWatchlist={removeFromWatchlist} setWatchlist={setWatchlist}
+              />
+            }
+          />        </Routes>
       </Suspense>
- 
+
     </>
   )
 }

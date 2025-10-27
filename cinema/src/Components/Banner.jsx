@@ -9,7 +9,7 @@ function Banner() {
         
       }}
     >
-      <div className="text-white  text-xl text-center w-full bg-blue-900/60 mt-155">
+      <div className="text-white  text-xl text-center w-full bg-blue-900/60 mt-150">
         Avengers Endgame
       </div>
     </div>

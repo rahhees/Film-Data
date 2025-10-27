@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import MovieCard from './MovieCard'
 import axios from 'axios'
 import Pagination from './Pagination'
-import Watchlist from './Watchlist'
+
 
 function Movies({ removeFromWatchlist, addWatchlist, watchlist }) {
     const [movies, setMovies] = useState([])
@@ -51,4 +51,3 @@ function Movies({ removeFromWatchlist, addWatchlist, watchlist }) {
 export default Movies
 
 
-// https://api.themoviedb.org/3/movie/popular?api_key=6c828830dcacf5f4dee75e734dfb16fc&language=en-US&page=1

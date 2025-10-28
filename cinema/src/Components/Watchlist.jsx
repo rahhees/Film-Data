@@ -92,24 +92,27 @@ function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
                   className="border-b hover:bg-gray-50 transition-all"
                   key={movie.id}
                 >
-                  <td className="flex items-center px-6 py-4 text-left">
+                  {/* ✅ Responsive Image + Title */}
+                  <td className="flex flex-col sm:flex-row items-center px-4 sm:px-6 py-4 text-left gap-3 sm:gap-4">
                     <img
-                      className="h-[6rem] w-[8rem] rounded-lg object-cover"
+                      className="h-[8rem] w-[100%] sm:w-[8rem] sm:h-[6rem] rounded-lg object-cover"
                       src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                       alt={movie.title}
                     />
-                    <div className="ml-4 font-semibold text-gray-800">
+                    <div className="text-center sm:text-left font-semibold text-gray-800 text-sm sm:text-base">
                       {movie.original_title || movie.title}
                     </div>
                   </td>
-                  <td>{movie.vote_average}</td>
-                  <td>{movie.popularity.toFixed(0)}</td>
-                  <td>
+                  <td className="text-sm sm:text-base">{movie.vote_average}</td>
+                  <td className="text-sm sm:text-base">
+                    {movie.popularity.toFixed(0)}
+                  </td>
+                  <td className="text-sm sm:text-base">
                     {movie.genre_ids?.map((id) => genreid[id]).join(", ")}
                   </td>
                   <td
                     onClick={() => removeFromWatchlist(movie)}
-                    className="text-red-600 font-bold hover:underline cursor-pointer"
+                    className="text-red-600 font-bold hover:underline cursor-pointer text-sm sm:text-base"
                   >
                     DELETE
                   </td>
@@ -134,28 +137,31 @@ function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
                 key={movie.id}
                 className="flex flex-col bg-white rounded-lg shadow p-3 border border-gray-200"
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                  alt={movie.title}
-                  className="h-[10rem] w-full object-cover rounded-md"
-                />
-                <div className="mt-3">
-                  <h2 className="font-semibold text-gray-800 text-lg">
-                    {movie.original_title || movie.title}
-                  </h2>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Genre: {movie.genre_ids?.map((id) => genreid[id]).join(", ")}
-                  </p>
-                  <div className="flex justify-between mt-2 text-sm text-gray-600">
-                    <span>⭐ {movie.vote_average}</span>
-                    <span>🔥 {movie.popularity.toFixed(0)}</span>
+                {/* ✅ Responsive image section */}
+                <div className="flex flex-col xs:flex-row gap-3">
+                  <img
+                    src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                    alt={movie.title}
+                    className="h-[12rem] w-full xs:w-[10rem] object-cover rounded-md"
+                  />
+                  <div className="flex flex-col justify-between mt-2 xs:mt-0">
+                    <h2 className="font-semibold text-gray-800 text-lg leading-snug">
+                      {movie.original_title || movie.title}
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Genre: {movie.genre_ids?.map((id) => genreid[id]).join(", ")}
+                    </p>
+                    <div className="flex justify-between mt-2 text-sm text-gray-600">
+                      <span>⭐ {movie.vote_average}</span>
+                      <span>🔥 {movie.popularity.toFixed(0)}</span>
+                    </div>
+                    <button
+                      onClick={() => removeFromWatchlist(movie)}
+                      className="w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-md text-sm font-semibold"
+                    >
+                      Delete
+                    </button>
                   </div>
-                  <button
-                    onClick={() => removeFromWatchlist(movie)}
-                    className="w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-md text-sm font-semibold"
-                  >
-                    Delete
-                  </button>
                 </div>
               </div>
             ))}

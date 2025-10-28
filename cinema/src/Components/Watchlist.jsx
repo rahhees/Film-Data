@@ -1,109 +1,168 @@
-import React, { useEffect, useState } from 'react'
-import genreid from '../assets/Utility/Genre'
+import React, { useEffect, useState } from "react";
+import genreid from "../assets/Utility/Genre";
 
 function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
-  const [search, setSearch] = useState('')
-  const [genre, setGenre] = useState(['All Genres'])
-  const [currGenre, setCurrGenre] = useState('All Genres')
-
+  const [search, setSearch] = useState("");
+  const [genre, setGenre] = useState(["All Genres"]);
+  const [currGenre, setCurrGenre] = useState("All Genres");
 
   const sortIncreasing = () => {
-    const increase = [...watchlist].sort((a, b) => a.vote_average - b.vote_average)
-    setWatchlist(increase)
-  }
+    const increase = [...watchlist].sort((a, b) => a.vote_average - b.vote_average);
+    setWatchlist(increase);
+  };
 
   const sortDecreasing = () => {
-    const decrease = [...watchlist].sort((a, b) => b.vote_average - a.vote_average)
-    setWatchlist(decrease)
-  }
+    const decrease = [...watchlist].sort((a, b) => b.vote_average - a.vote_average);
+    setWatchlist(decrease);
+  };
 
   const handleFilter = (genre) => {
-    setCurrGenre(genre)
-  }
-
-  
+    setCurrGenre(genre);
+  };
 
   useEffect(() => {
-    let temp = watchlist.map((movie) => {
-      return genreid[movie.genre_ids[0]]
-    })
-    temp = new Set(temp)
-    setGenre(['All Genres', ...temp])
-  }, [watchlist])
-
+    let temp = watchlist.map((movie) => genreid[movie.genre_ids[0]]);
+    temp = new Set(temp);
+    setGenre(["All Genres", ...temp]);
+  }, [watchlist]);
 
   return (
     <>
-      <div className='flex justify-center flex-wrap m-4 gap-20 cursor-pointer '>
-        {
-          genre.map((movie) => {
-            return <div onClick={() => handleFilter(movie)} className={currGenre == movie ? 'flex  justify-center h-[3rem] w-[9rem] bg-blue-400 rounded-xl text-white font-bold items-center mx-4 ' : "flex justify-center h-[3rem] w-[9rem] bg-gray-400/50 rounded-xl text-white font-bold items-center mx-4"}>{movie}</div>
-          })
-        }
-
-
+      {/* Genre Filter */}
+      <div className="flex justify-center flex-wrap sm:flex-nowrap gap-3 sm:gap-6 m-4 overflow-x-auto scrollbar-hide">
+        {genre.map((movie) => (
+          <div
+            key={movie}
+            onClick={() => handleFilter(movie)}
+            className={`flex justify-center min-w-[8rem] sm:min-w-[9rem] h-[2.8rem] sm:h-[3rem] rounded-xl font-semibold text-sm sm:text-base items-center px-3 transition-all duration-300 cursor-pointer ${
+              currGenre === movie
+                ? "bg-blue-500 text-white shadow-md"
+                : "bg-gray-400/60 text-white hover:bg-gray-500"
+            }`}
+          >
+            {movie}
+          </div>
+        ))}
       </div>
-      <div className='flex justify-center my-4m overflow-x-hidden'>
-        <input className='h-[3rem] w-[18rem] border rounded-lg bg-gray-200 outline-none px-4' type='text' value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Enter Film Name...' />
+
+      {/* Search Input */}
+      <div className="flex justify-center my-4 px-4">
+        <input
+          className="h-[2.8rem] w-full sm:w-[20rem] border rounded-lg bg-gray-200 outline-none px-4 focus:ring-2 focus:ring-blue-400"
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search movie..."
+        />
       </div>
-      <div className='border border-gray-200 m-8 h-[500px] overflow-y-auto'>
-        <table className='rounded-lg w-full text-gray-500 text-center'>
-          <thead className='border-b-1'>
-            <tr >
-              <th>Name</th>
-              <th className='flex justify-center'>
-                <div className='p-2' onClick={sortIncreasing}><i class='fa-solid fa-arrow-up'></i></div>
-                <div className='p-2'>Ratings</div>
-                <div className='p-2' onClick={sortDecreasing}><i class='fa-solid fa-arrow-down'></i></div>
+
+      {/* Table or Card View */}
+      <div className="border border-gray-200 m-4 sm:m-8 rounded-lg h-[500px] overflow-y-auto">
+        {/* Table for larger screens */}
+        <table className="hidden sm:table w-full text-gray-600 text-center">
+          <thead className="border-b bg-gray-100 text-gray-800 font-semibold sticky top-0">
+            <tr>
+              <th className="p-3">Name</th>
+              <th className="p-3 flex justify-center items-center">
+                <div className="p-2 cursor-pointer" onClick={sortIncreasing}>
+                  <i className="fa-solid fa-arrow-up"></i>
+                </div>
+                <div className="p-2">Ratings</div>
+                <div className="p-2 cursor-pointer" onClick={sortDecreasing}>
+                  <i className="fa-solid fa-arrow-down"></i>
+                </div>
               </th>
-              <th>Poplarity</th>
-              <th>Genre</th>
+              <th className="p-3">Popularity</th>
+              <th className="p-3">Genre</th>
+              <th className="p-3">Action</th>
             </tr>
           </thead>
           <tbody>
-            {
-              watchlist.filter((category) => {
-                if (currGenre === "All Genres") {
-                  return true
-                } else {
-                  return genreid[category.genre_ids[0]] == currGenre;
-                }
-              }).filter((movie) => {
-                return movie.title.toLowerCase().includes(search.toLocaleLowerCase())
-
-              }).map((movie) => (
-                <tr className='border-b-2' key={movie.id}>
-                  <td className='flex items-center px-6 py-4'>
+            {watchlist
+              .filter((category) =>
+                currGenre === "All Genres"
+                  ? true
+                  : genreid[category.genre_ids[0]] === currGenre
+              )
+              .filter((movie) =>
+                movie.title.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((movie) => (
+                <tr
+                  className="border-b hover:bg-gray-50 transition-all"
+                  key={movie.id}
+                >
+                  <td className="flex items-center px-6 py-4 text-left">
                     <img
-                      className='h-[8rem] w-[10rem] rounded-lg object-cover'
+                      className="h-[6rem] w-[8rem] rounded-lg object-cover"
                       src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                       alt={movie.title}
                     />
-                    <div className='ml-4 font-semibold text-gray-800'>
+                    <div className="ml-4 font-semibold text-gray-800">
                       {movie.original_title || movie.title}
                     </div>
                   </td>
                   <td>{movie.vote_average}</td>
                   <td>{movie.popularity.toFixed(0)}</td>
                   <td>
-
-                    {movie.genre_ids?.map(id => genreid[id]).join(", ")}</td>
+                    {movie.genre_ids?.map((id) => genreid[id]).join(", ")}
+                  </td>
                   <td
                     onClick={() => removeFromWatchlist(movie)}
-                    className='text-red-700 font-bold hover:cursor-pointer'
+                    className="text-red-600 font-bold hover:underline cursor-pointer"
                   >
                     DELETE
                   </td>
                 </tr>
-              ))
-            }
-
-
+              ))}
           </tbody>
         </table>
+
+        {/* Card layout for mobile */}
+        <div className="sm:hidden p-4 space-y-4">
+          {watchlist
+            .filter((category) =>
+              currGenre === "All Genres"
+                ? true
+                : genreid[category.genre_ids[0]] === currGenre
+            )
+            .filter((movie) =>
+              movie.title.toLowerCase().includes(search.toLowerCase())
+            )
+            .map((movie) => (
+              <div
+                key={movie.id}
+                className="flex flex-col bg-white rounded-lg shadow p-3 border border-gray-200"
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                  alt={movie.title}
+                  className="h-[10rem] w-full object-cover rounded-md"
+                />
+                <div className="mt-3">
+                  <h2 className="font-semibold text-gray-800 text-lg">
+                    {movie.original_title || movie.title}
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Genre: {movie.genre_ids?.map((id) => genreid[id]).join(", ")}
+                  </p>
+                  <div className="flex justify-between mt-2 text-sm text-gray-600">
+                    <span>⭐ {movie.vote_average}</span>
+                    <span>🔥 {movie.popularity.toFixed(0)}</span>
+                  </div>
+                  <button
+                    onClick={() => removeFromWatchlist(movie)}
+                    className="w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-2 rounded-md text-sm font-semibold"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Watchlist
+export default Watchlist;

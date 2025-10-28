@@ -43,7 +43,7 @@ function App() {
 
   const removeFromWatchlist = (movie) => {
     setWatchlist((prev) => prev.filter((item) => item.id !== movie.id));
-      toast.success(`${movie.title} removed from watchlist ❌`);
+      toast.success(`${movie.title} removed from watchlist ❌` );
   };
   console.log(watchlist)
 
@@ -52,7 +52,7 @@ function App() {
 
   return (
     <>
-      <Toaster position='top-right' />
+      <Toaster position='top-right'  />
 
       <Navbar watchlistCount={watchlist.length} />
 

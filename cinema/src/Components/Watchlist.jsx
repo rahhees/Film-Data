@@ -28,24 +28,26 @@ function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
 
   return (
     <>
-      {/* Genre Filter */}
-      <div className="flex justify-center flex-wrap sm:flex-nowrap gap-3 sm:gap-6 m-4 overflow-x-auto scrollbar-hide">
-        {genre.map((movie) => (
-          <div
-            key={movie}
-            onClick={() => handleFilter(movie)}
-            className={`flex justify-center min-w-[8rem] sm:min-w-[9rem] h-[2.8rem] sm:h-[3rem] rounded-xl font-semibold text-sm sm:text-base items-center px-3 transition-all duration-300 cursor-pointer ${
-              currGenre === movie
-                ? "bg-blue-500 text-white shadow-md"
-                : "bg-gray-400/60 text-white hover:bg-gray-500"
-            }`}
-          >
-            {movie}
-          </div>
-        ))}
+      {/* 🎬 Genre Filter — Now Fully Responsive */}
+      <div className="w-full flex justify-center">
+        <div className="flex flex-wrap sm:flex-nowrap justify-center sm:justify-start gap-3 sm:gap-6 m-4 px-2 sm:px-6 overflow-x-auto scrollbar-hide w-full max-w-[1000px]">
+          {genre.map((movie) => (
+            <div
+              key={movie}
+              onClick={() => handleFilter(movie)}
+              className={`flex-shrink-0 flex justify-center items-center min-w-[7rem] sm:min-w-[9rem] h-[2.6rem] sm:h-[3rem] rounded-xl font-semibold text-sm sm:text-base px-3 transition-all duration-300 cursor-pointer ${
+                currGenre === movie
+                  ? "bg-blue-500 text-white shadow-md scale-105"
+                  : "bg-gray-400/70 text-white hover:bg-gray-500"
+              }`}
+            >
+              {movie}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Search Input */}
+      {/* 🔍 Search Input */}
       <div className="flex justify-center my-4 px-4">
         <input
           className="h-[2.8rem] w-full sm:w-[20rem] border rounded-lg bg-gray-200 outline-none px-4 focus:ring-2 focus:ring-blue-400"
@@ -56,7 +58,7 @@ function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
         />
       </div>
 
-      {/* Table or Card View */}
+      {/* 🎞️ Table or Card View */}
       <div className="border border-gray-200 m-4 sm:m-8 rounded-lg h-[500px] overflow-y-auto">
         {/* Table for larger screens */}
         <table className="hidden sm:table w-full text-gray-600 text-center">
@@ -92,7 +94,7 @@ function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
                   className="border-b hover:bg-gray-50 transition-all"
                   key={movie.id}
                 >
-                  {/* ✅ Responsive Image + Title */}
+                  {/* 🎥 Responsive Image + Title */}
                   <td className="flex flex-col sm:flex-row items-center px-4 sm:px-6 py-4 text-left gap-3 sm:gap-4">
                     <img
                       className="h-[8rem] w-[100%] sm:w-[8rem] sm:h-[6rem] rounded-lg object-cover"
@@ -121,7 +123,7 @@ function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
           </tbody>
         </table>
 
-        {/* Card layout for mobile */}
+        {/* 📱 Card layout for mobile */}
         <div className="sm:hidden p-4 space-y-4">
           {watchlist
             .filter((category) =>
@@ -137,7 +139,7 @@ function Watchlist({ watchlist, setWatchlist, removeFromWatchlist }) {
                 key={movie.id}
                 className="flex flex-col bg-white rounded-lg shadow p-3 border border-gray-200"
               >
-                {/* ✅ Responsive image section */}
+                {/* 🖼️ Responsive image section */}
                 <div className="flex flex-col xs:flex-row gap-3">
                   <img
                     src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
